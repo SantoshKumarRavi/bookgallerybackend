@@ -46,7 +46,9 @@ Router.post('/login', (req, res) => {
       if(docs.length==0){
         res.send(JSON.stringify({status:"fail",message:'you are not registered'}))
       }else{
-        if(password!==docs.password){
+
+        if(password!==docs[0].password){
+          // console.log("pass",password,"pass fetcg", docs[0].password)
           res.send(JSON.stringify({status:"fail",message:'password not matching'}))
         }else{
           res.send(JSON.stringify({status:"success",message:'you are logging in'}))
@@ -84,9 +86,9 @@ Router.post('/login', (req, res) => {
       book.updateOne({_id:mongooseid},req.body, function(err,data){
         console.log(data)
         if(data.modifiedCount!=0){
-          res.send('you are updated')
+          res.send(JSON.stringify({message:'you are updated'}))
         }else{
-          res.send('no match found')
+          res.send(JSON.stringify({message:'no match found'}))
         }
       });
       })
@@ -96,9 +98,9 @@ Router.post('/login', (req, res) => {
       const mongooseid=(mongoose.Types.ObjectId(id))
       book.deleteOne({_id:mongooseid},req.body, function(err,data){
         if(data.deletedCount!=0){
-          res.send('you are deleted')
+          res.send(JSON.stringify({status:"success",message:'you are deleted'}))
         }else{
-          res.send('no match found for deletion')
+          res.send(JSON.stringify({status:"fail",message:'no match found for deletion'}))
         }
       });
         })
